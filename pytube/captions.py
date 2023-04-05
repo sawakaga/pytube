@@ -83,7 +83,7 @@ class Caption:
         segments = []
         root = ElementTree.fromstring(xml_captions)
         for i, child in enumerate(list(root.findall('body/p'))):
-            text = ''.join(child.itertext()).strip()
+            text = child.text or ""
             if not text:
                 continue
             caption = unescape(text.replace("\n", " ").replace("  ", " "),)
