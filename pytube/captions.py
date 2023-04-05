@@ -74,6 +74,21 @@ class Caption:
         ms = f"{fraction:.3f}".replace("0.", "")
         return time_fmt + ms
 
+    def xml_caption_to_text(self, xml_captions: str) -> str:
+        """
+        Converting xml caption tracks to text itself without tracks
+
+        :param str xml_captions:
+            XML formatted caption tracks.
+        """
+        root = ElementTree.fromstring(xml_captions)
+        root_list = list(root.findall('body/p'))
+        text = ""
+        for _, child in enumerate(root_list):
+            text.join(child.text)
+
+        return text
+
     def xml_caption_to_srt(self, xml_captions: str) -> str:
         """Convert xml caption tracks to "SubRip Subtitle (srt)".
 
@@ -83,8 +98,7 @@ class Caption:
         segments = []
         root = ElementTree.fromstring(xml_captions)
         for i, child in enumerate(list(root.findall('body/p'))):
-            text = child.attrib["s"]
-            print(text)
+            text = child.text or ""
             caption = unescape(text.replace("\n", " ").replace("  ", " "),)
             try:
                 duration = float(child.attrib["d"])
