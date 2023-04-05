@@ -83,7 +83,7 @@ class Caption:
         segments = []
         root = ElementTree.fromstring(xml_captions)
         for i, child in enumerate(list(root.findall('body/p'))):
-            text = child.text or ""
+            text = child.attrib["s"]
             caption = unescape(text.replace("\n", " ").replace("  ", " "),)
             try:
                 duration = float(child.attrib["d"])
